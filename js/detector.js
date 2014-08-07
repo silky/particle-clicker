@@ -75,10 +75,16 @@ var detector =
         }
     ],
 
-    animate: function()
+    animate: function(time)
     {
+        if (this.starttime === undefined) {
+            this.starttime = performance.now();
+        }
+        var duration = time - this.starttime;
+        this.starttime = performance.now();
+
         requestAnimFrame(detector.animate);
-        detector.draw();
+        detector.draw(duration);
     },
 
     init: function()
@@ -283,14 +289,14 @@ var detector =
         }
     },
 
-    draw: function()
+    draw: function(duration)
     {
         detector.events.ctx.clearRect(0, 0, 400, 400);
 
         var del = -1;
         for (var e in detector.events.list) {
             if (detector.events.list[e].alpha > 0) {
-                detector.events.list[e].draw();
+                detector.events.list[e].draw(duration);
             } else {
                 del = detector.events.list[e].count;
             }
